@@ -86,11 +86,11 @@
                 </div>
                 @endforelse
             </div>
-            <button type="button" onclick="addSkill()" class="btn-ghost text-sm">+ Add Skill</button>
+            <button type="button" onclick="addSkill()" class="btn btn-secondary text-sm">+ Add Skill</button>
         </div>
         <div class="flex items-center justify-end gap-3">
-            <a href="{{ route('students.show', $student) }}" class="btn-ghost">Cancel</a>
-            <button type="submit" class="btn-orange">Update Student</button>
+            <a href="{{ route('students.show', $student) }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Update Student</button>
         </div>
     </form>
 </div>

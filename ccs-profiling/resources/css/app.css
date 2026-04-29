@@ -7,7 +7,7 @@
   .sidebar-link:hover { @apply bg-white/10 text-white; }
   .sidebar-link.active { @apply bg-orange-500 text-white shadow-lg; }
   .btn-primary { @apply bg-orange-500 hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-lg; }
-  .btn-ghost { @apply text-slate-500 hover:bg-slate-100 font-semibold px-4 py-2.5 rounded-xl transition-all; }
+  .btn-ghost { @apply bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-5 py-2.5 rounded-xl transition-all; }
   .card { @apply bg-white rounded-2xl border border-slate-100 shadow-sm; }
   .form-input { @apply w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl focus:ring-2 focus:ring-orange-400/30 focus:border-orange-400 outline-none py-3 px-4 transition-all; }
   .form-label { @apply block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2; }

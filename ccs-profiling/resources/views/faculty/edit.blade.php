@@ -40,8 +40,8 @@
             </div>
         </div>
         <div class="flex items-center justify-end gap-3">
-            <a href="{{ route('faculty.show', $faculty) }}" class="btn-ghost">Cancel</a>
-            <button type="submit" class="btn-orange">Update Faculty</button>
+            <a href="{{ route('faculty.show', $faculty) }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Update Faculty</button>
         </div>
     </form>
 </div>
