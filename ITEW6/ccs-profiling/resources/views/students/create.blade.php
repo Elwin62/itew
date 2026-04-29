@@ -94,7 +94,15 @@
                     </select>
                 </div>
             </div>
-            <button type="button" onclick="addSkill()" class="btn-ghost text-sm">+ Add Another Skill</button>
+            <button type="button" onclick="addSkill()" class="btn btn-secondary text-sm">+ Add Another Skill</button>
+        </div>
+
+        <div class="card p-8">
+            <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Violations</h3>
+            <div id="violations-container" class="space-y-4 mb-4">
+                <!-- Violations will be added here -->
+            </div>
+            <button type="button" onclick="addViolation()" class="btn btn-secondary text-sm">+ Add Violation</button>
         </div>
 
         <div class="flex items-center justify-end gap-3">
@@ -121,6 +129,23 @@ function addSkill() {
     `;
     container.appendChild(row);
     skillIndex++;
+}
+
+let violationIndex = 0;
+function addViolation() {
+    const container = document.getElementById('violations-container');
+    const row = document.createElement('div');
+    row.className = 'violation-row grid md:grid-cols-2 gap-4 p-6 border border-slate-200 rounded-xl relative pt-8';
+    row.innerHTML = `
+        <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-4 text-slate-400 hover:text-red-500 font-bold">✖ Remove</button>
+        <div><label class="form-label">Category</label><input name="violations[${violationIndex}][category]" class="form-input" required placeholder="e.g. Minor Offense"></div>
+        <div><label class="form-label">Sanction</label><input name="violations[${violationIndex}][sanction]" class="form-input" required placeholder="e.g. Warning"></div>
+        <div><label class="form-label">Status</label><select name="violations[${violationIndex}][status]" class="form-input" required><option>Active</option><option>Resolved</option></select></div>
+        <div><label class="form-label">Reported By</label><input name="violations[${violationIndex}][reported_by]" class="form-input" required placeholder="e.g. Prof. Smith"></div>
+        <div><label class="form-label">Date Reported</label><input type="date" name="violations[${violationIndex}][date_reported]" class="form-input" required></div>
+    `;
+    container.appendChild(row);
+    violationIndex++;
 }
 </script>
 @endsection

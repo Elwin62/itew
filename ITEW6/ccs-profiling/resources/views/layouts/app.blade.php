@@ -113,8 +113,16 @@
                 Faculty
             </a>
 
-            <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">Queries</div>
-            <a href="{{ route('queries.basketball') }}" class="sidebar-link {{ request()->is('queries/basketball') ? 'active' : '' }}">
+            <a href="{{ route('admin.index') }}" class="sidebar-link {{ request()->routeIs('admin.index') ? 'active' : '' }}">⚙️ System Settings</a>
+
+            <div class="mt-6 mb-2 px-3 text-xs font-black text-slate-400 uppercase tracking-widest">Academics</div>
+            <a href="{{ route('instruction.index') }}" class="sidebar-link {{ request()->routeIs('instruction.*') ? 'active' : '' }}">📚 Instruction (Curriculum)</a>
+            <a href="{{ route('schedules.index') }}" class="sidebar-link {{ request()->routeIs('schedules.*') ? 'active' : '' }}">🗓 Schedules</a>
+            <a href="{{ route('events.index') }}" class="sidebar-link {{ request()->routeIs('events.*') ? 'active' : '' }}">📅 Events</a>
+
+            <div class="mt-6 mb-2 px-3 text-xs font-black text-slate-400 uppercase tracking-widest">Queries & Reports</div>
+            <a href="{{ route('queries.advanced') }}" class="sidebar-link {{ request()->routeIs('queries.advanced') ? 'active' : '' }}">🔍 Advanced Profiling</a>
+            <a href="{{ route('queries.basketball') }}" class="sidebar-link {{ request()->routeIs('queries.basketball') ? 'active' : '' }}">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/></svg>
                 Basketball Skills
             </a>
@@ -122,26 +130,11 @@
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                 Programming Skills
             </a>
-
-            <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">Modules</div>
-            <a href="{{ route('events.index') }}" class="sidebar-link {{ request()->routeIs('events.*') ? 'active' : '' }}">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Events
-            </a>
-            <a href="{{ route('schedules.index') }}" class="sidebar-link {{ request()->routeIs('schedules.*') ? 'active' : '' }}">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Schedules
-            </a>
-            <a href="{{ route('admin.index') }}" class="sidebar-link {{ request()->routeIs('admin.*') ? 'active' : '' }}">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                Admin Panel
-            </a>
-
-            <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">Reports</div>
             <a href="{{ route('reports.admin') }}" class="sidebar-link {{ request()->routeIs('reports.admin') ? 'active' : '' }}">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                System Reports
+                Generate Reports
             </a>
+
 
             @elseif(auth()->user()->role === 'Faculty')
             {{-- FACULTY NAVIGATION --}}

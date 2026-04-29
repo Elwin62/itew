@@ -76,6 +76,15 @@ class StudentController extends Controller
             }
         }
 
+        // Add violations if provided
+        if ($request->violations) {
+            foreach ($request->violations as $violation) {
+                if (!empty($violation['category'])) {
+                    $student->violations()->create($violation);
+                }
+            }
+        }
+
         ActivityLog::create(['user_id' => auth()->id(), 'user_name' => auth()->user()->name, 'action' => 'Added new student', 'target' => $student->full_name, 'module' => 'Student Information']);
 
         return redirect()->route('students.show', $student)->with('success', 'Student record created successfully!');
@@ -83,7 +92,7 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        $student->load('skills');
+        $student->load(['skills', 'violations']);
         return view('students.edit', compact('student'));
     }
 
@@ -105,11 +114,21 @@ class StudentController extends Controller
         $student->update($validated);
 
         // Sync skills
-        if ($request->has('skills')) {
-            $student->skills()->delete();
+        $student->skills()->delete();
+        if ($request->skills) {
             foreach ($request->skills as $skill) {
                 if (!empty($skill['name'])) {
                     $student->skills()->create($skill);
+                }
+            }
+        }
+
+        // Sync violations
+        $student->violations()->delete();
+        if ($request->violations) {
+            foreach ($request->violations as $violation) {
+                if (!empty($violation['category'])) {
+                    $student->violations()->create($violation);
                 }
             }
         }

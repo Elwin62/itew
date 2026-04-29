@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:Admin')->group(function () {
         Route::resource('students', StudentController::class);
         Route::resource('faculty', FacultyController::class);
+        Route::get('/queries/advanced', [App\Http\Controllers\StudentQueryController::class, 'advanced'])->name('queries.advanced');
         Route::get('/queries/basketball', [QueryController::class, 'basketball'])->name('queries.basketball');
         Route::get('/queries/programming', [QueryController::class, 'programming'])->name('queries.programming');
         Route::get('/queries/skill/{skill}', [QueryController::class, 'custom'])->name('queries.custom');
@@ -50,6 +51,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/admin/logs/{log}', [AdminController::class, 'destroyLog'])->name('admin.logs.destroy');
         Route::get('/reports/admin', [ReportController::class, 'adminReports'])->name('reports.admin');
         Route::get('/reports/admin/download', [ReportController::class, 'adminDownload'])->name('reports.admin.download');
+
+        // Instruction Module
+        Route::get('/instruction', [App\Http\Controllers\InstructionController::class, 'index'])->name('instruction.index');
+        Route::post('/instruction/curriculum', [App\Http\Controllers\InstructionController::class, 'storeCurriculum'])->name('instruction.curriculum.store');
+        Route::delete('/instruction/curriculum/{curriculum}', [App\Http\Controllers\InstructionController::class, 'destroyCurriculum'])->name('instruction.curriculum.destroy');
+        Route::get('/instruction/curriculum/{curriculum}', [App\Http\Controllers\InstructionController::class, 'showCurriculum'])->name('instruction.curriculum.show');
+        Route::post('/instruction/curriculum/{curriculum}/subject', [App\Http\Controllers\InstructionController::class, 'storeSubject'])->name('instruction.subject.store');
+        Route::delete('/instruction/subject/{subject}', [App\Http\Controllers\InstructionController::class, 'destroySubject'])->name('instruction.subject.destroy');
+        Route::get('/instruction/subject/{subject}/syllabus', [App\Http\Controllers\InstructionController::class, 'showSyllabus'])->name('instruction.syllabus.show');
+        Route::post('/instruction/subject/{subject}/syllabus', [App\Http\Controllers\InstructionController::class, 'storeSyllabus'])->name('instruction.syllabus.store');
+        Route::post('/instruction/syllabus/{syllabus}/lesson', [App\Http\Controllers\InstructionController::class, 'storeLesson'])->name('instruction.lesson.store');
+        Route::delete('/instruction/lesson/{lesson}', [App\Http\Controllers\InstructionController::class, 'destroyLesson'])->name('instruction.lesson.destroy');
     });
 
 });
