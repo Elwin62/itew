@@ -32,8 +32,7 @@ class DatabaseSeeder extends Seeder
     private $lastNames = ['Dela Cruz','Santos','Reyes','Garcia','Mendoza','Torres','Castillo','Rivera',
         'Ortiz','Lopez','Martinez','Hernandez','Gonzales','Ramos','Cruz','Lim','Tan','Sy','Co','Wang',
         'Bautista','Aquino','Villanueva','Pascual','Domingo','Flores','Santiago','Aguilar','Navarro','Abad'];
-    private $programs = ['BS Computer Science','BS Information Technology','BS Electrical Engineering',
-        'BS Mechanical Engineering','BS Civil Engineering','BS Accountancy','BS Nursing','BS Education'];
+    private $programs = ['BS Information Technology','BS Computer Science','BS Information Systems'];
     private $sections = ['A','B','C'];
     private $brgy = ['Sala','Niugan','Pulo','Butong','Mamatay','San Isidro','Pittland','Marinig'];
     private $bloodTypes = ['O+','A+','B+','AB+','O-','A-','B-','AB-'];
@@ -75,6 +74,7 @@ class DatabaseSeeder extends Seeder
             FacultySeeder::class,
             EventSeeder::class,
             ScheduleSeeder::class,
+            ReportDataSeeder::class,
         ]);
     }
 }
@@ -119,8 +119,7 @@ class StudentSeeder extends Seeder
     private $lastNames = ['Dela Cruz','Santos','Reyes','Garcia','Mendoza','Torres','Castillo','Rivera',
         'Ortiz','Lopez','Martinez','Hernandez','Gonzales','Ramos','Cruz','Lim','Tan','Sy','Co','Wang',
         'Bautista','Aquino','Villanueva','Pascual','Domingo','Flores','Santiago','Aguilar','Navarro','Abad'];
-    private $programs = ['BS Computer Science','BS Information Technology','BS Electrical Engineering',
-        'BS Mechanical Engineering','BS Civil Engineering','BS Accountancy','BS Nursing','BS Education'];
+    private $programs = ['BS Information Technology','BS Computer Science','BS Information Systems'];
     private $brgy = ['Sala','Niugan','Pulo','Butong','Mamatay','San Isidro','Pittland','Marinig'];
     private $bloodTypes = ['O+','A+','B+','AB+','O-','A-','B-','AB-'];
     private $allSkills = ['React.js','Python','Java','C++','Networking','Design','Leadership',

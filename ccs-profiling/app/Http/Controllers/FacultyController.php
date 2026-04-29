@@ -101,6 +101,42 @@ class FacultyController extends Controller
         $faculty = Faculty::where('email', $user->email)
             ->with(['skills', 'education', 'subjects'])
             ->first();
-        return view('faculty.show', compact('faculty'));
+        return view('faculty.my-profile', compact('faculty'));
+    }
+
+    // Faculty self-edit form
+    public function editMyProfile()
+    {
+        $user    = auth()->user();
+        $faculty = Faculty::where('email', $user->email)->with('skills')->first();
+        if (!$faculty) return redirect()->route('faculty.my-profile')->with('error', 'No faculty record linked.');
+        return view('faculty.edit-profile', compact('faculty'));
+    }
+
+    // Faculty self-update
+    public function updateMyProfile(Request $request)
+    {
+        $user    = auth()->user();
+        $faculty = Faculty::where('email', $user->email)->first();
+        if (!$faculty) return redirect()->route('faculty.my-profile')->with('error', 'No faculty record linked.');
+
+        $validated = $request->validate([
+            'contact_number' => 'required|string|max:20',
+            'address'        => 'nullable|string|max:500',
+        ]);
+
+        $faculty->update($validated);
+
+        // Update skills
+        if ($request->has('skills')) {
+            $faculty->skills()->delete();
+            foreach ($request->input('skills', []) as $skill) {
+                if (!empty($skill['skill'])) {
+                    $faculty->skills()->create($skill);
+                }
+            }
+        }
+
+        return redirect()->route('faculty.my-profile')->with('success', 'Profile updated successfully!');
     }
 }

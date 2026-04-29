@@ -6,7 +6,7 @@
 @section('content')
 
 {{-- ── Stat Cards ── --}}
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
     @foreach([
         ['Total Students',   number_format($totalStudents),  '👥', '#3b82f6', '#dbeafe'],
         ['My Sections',      $totalSections ?: $schedules->count(), '📋', '#8b5cf6', '#f3e8ff'],
@@ -65,7 +65,7 @@
             @foreach($faculty->education as $edu)
             <div style="padding:10px 0;border-bottom:1px solid #f8fafc;">
                 <div style="font-size:12px;font-weight:800;color:#0f172a;">{{ $edu->degree }}</div>
-                <div style="font-size:11px;color:#64748b;">{{ $edu->school }}</div>
+                @if($edu->school)<div style="font-size:11px;color:#64748b;">{{ $edu->school }}</div>@endif
                 @if($edu->year_graduated)<div style="font-size:11px;color:#94a3b8;">Graduated {{ $edu->year_graduated }}</div>@endif
             </div>
             @endforeach
@@ -112,8 +112,7 @@
                             <div style="font-size:11px;color:#64748b;margin-top:2px;display:flex;gap:12px;">
                                 <span>📍 {{ $class->room }}</span>
                                 <span>👥 Section {{ $class->section }}</span>
-                                @php $sc = \App\Models\Student::where('section',$class->section)->count(); @endphp
-                                <span>🎓 {{ $sc }} students</span>
+                                <span>🎓 {{ $sectionStudentCounts[$class->section] ?? 0 }} students</span>
                             </div>
                         </div>
                         <span style="padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;background:#ede9fe;color:#7c3aed;">{{ $class->type ?? 'Lecture' }}</span>
@@ -179,6 +178,35 @@
                         </div>
                     </div>
                     @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- Reports Card --}}
+        <div class="card" style="overflow:hidden;">
+            <div style="height:4px;background:linear-gradient(90deg,#f97316,#f59e0b);"></div>
+            <div style="padding:20px 24px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;">📊 Teaching Reports</div>
+                    <a href="{{ route('reports.faculty') }}" style="font-size:12px;color:#f97316;font-weight:700;text-decoration:none;">View Full Reports →</a>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+                    <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:14px;">
+                        <div style="font-size:28px;font-weight:900;color:#3b82f6;">{{ $schedules->count() }}</div>
+                        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Total Classes</div>
+                    </div>
+                    <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:14px;">
+                        <div style="font-size:28px;font-weight:900;color:#8b5cf6;">{{ $totalSections }}</div>
+                        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Sections</div>
+                    </div>
+                    <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:14px;">
+                        <div style="font-size:28px;font-weight:900;color:#f97316;">{{ $sectionCounts->sum('student_count') }}</div>
+                        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Students Taught</div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:10px;">
+                    <a href="{{ route('reports.faculty') }}" class="btn btn-primary" style="font-size:13px;">📊 View Reports</a>
+                    <a href="{{ route('reports.faculty.download') }}" class="btn" style="background:#eff6ff;color:#2563eb;font-size:13px;">📥 Download Report (CSV)</a>
                 </div>
             </div>
         </div>

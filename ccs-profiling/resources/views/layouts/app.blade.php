@@ -6,6 +6,7 @@
     <meta name="description" content="CCS Comprehensive Profiling System">
     <title>@yield('title', 'Dashboard') — CCS Profiling System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -66,6 +67,14 @@
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         .overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:40; }
         @media(max-width:1024px){#sidebar{transform:translateX(-100%)}.sidebar-open #sidebar{transform:translateX(0)}}
+
+        /* Print styles */
+        @media print {
+            #sidebar, header, footer, .no-print { display:none !important; }
+            main { padding:0 !important; }
+            .card { box-shadow:none !important; border:1px solid #e2e8f0 !important; break-inside:avoid; }
+            body { background:#fff !important; }
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen" style="color:#1e293b;">
@@ -128,10 +137,16 @@
                 Admin Panel
             </a>
 
+            <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">Reports</div>
+            <a href="{{ route('reports.admin') }}" class="sidebar-link {{ request()->routeIs('reports.admin') ? 'active' : '' }}">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                System Reports
+            </a>
+
             @elseif(auth()->user()->role === 'Faculty')
             {{-- FACULTY NAVIGATION --}}
             <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">My Portal</div>
-            <a href="{{ route('faculty.my-profile') }}" class="sidebar-link {{ request()->routeIs('faculty.my-profile') ? 'active' : '' }}">
+            <a href="{{ route('faculty.my-profile') }}" class="sidebar-link {{ request()->routeIs('faculty.*profile') ? 'active' : '' }}">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 My Profile
             </a>
@@ -140,12 +155,24 @@
                 My Schedules
             </a>
 
+            <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">Reports</div>
+            <a href="{{ route('reports.faculty') }}" class="sidebar-link {{ request()->routeIs('reports.faculty') ? 'active' : '' }}">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                My Reports
+            </a>
+
             @elseif(auth()->user()->role === 'Student')
             {{-- STUDENT NAVIGATION --}}
             <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">My Portal</div>
-            <a href="{{ route('student.my-profile') }}" class="sidebar-link {{ request()->routeIs('student.my-profile') ? 'active' : '' }}">
+            <a href="{{ route('student.my-profile') }}" class="sidebar-link {{ request()->routeIs('student.*profile') ? 'active' : '' }}">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                 My Profile
+            </a>
+
+            <div style="margin:16px 4px 8px;font-size:10px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.1em;">Reports</div>
+            <a href="{{ route('reports.student') }}" class="sidebar-link {{ request()->routeIs('reports.student') ? 'active' : '' }}">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                My Reports
             </a>
             @endif
         </nav>

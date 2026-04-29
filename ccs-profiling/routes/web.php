@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', fn() => redirect()->route('login'));
 
@@ -19,12 +20,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ── Faculty-only (MUST be before resource routes!) ─────────────
     Route::middleware('role:Faculty')->group(function () {
         Route::get('/faculty/profile', [FacultyController::class, 'myProfile'])->name('faculty.my-profile');
+        Route::get('/faculty/profile/edit', [FacultyController::class, 'editMyProfile'])->name('faculty.edit-profile');
+        Route::put('/faculty/profile', [FacultyController::class, 'updateMyProfile'])->name('faculty.update-profile');
         Route::get('/schedules/my', [ScheduleController::class, 'mySchedules'])->name('schedules.my');
+        Route::get('/reports/faculty', [ReportController::class, 'facultyReports'])->name('reports.faculty');
+        Route::get('/reports/faculty/download', [ReportController::class, 'facultyDownload'])->name('reports.faculty.download');
     });
 
     // ── Student-only ───────────────────────────────────────────────
     Route::middleware('role:Student')->group(function () {
         Route::get('/student/profile', [StudentController::class, 'myProfile'])->name('student.my-profile');
+        Route::get('/student/profile/edit', [StudentController::class, 'editMyProfile'])->name('student.edit-profile');
+        Route::put('/student/profile', [StudentController::class, 'updateMyProfile'])->name('student.update-profile');
+        Route::get('/reports/student', [ReportController::class, 'studentReports'])->name('reports.student');
+        Route::get('/reports/student/download', [ReportController::class, 'studentDownload'])->name('reports.student.download');
     });
 
     // ── Admin-only (resource routes last to avoid wildcard conflicts)
@@ -39,6 +48,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
         Route::post('/admin/seed', [AdminController::class, 'seedDatabase'])->name('admin.seed');
         Route::delete('/admin/logs/{log}', [AdminController::class, 'destroyLog'])->name('admin.logs.destroy');
+        Route::get('/reports/admin', [ReportController::class, 'adminReports'])->name('reports.admin');
+        Route::get('/reports/admin/download', [ReportController::class, 'adminDownload'])->name('reports.admin.download');
     });
 
 });

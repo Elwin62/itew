@@ -25,4 +25,7 @@ class Student extends Model
     public function internship(): HasOne { return $this->hasOne(StudentInternship::class); }
     public function guardian(): HasOne { return $this->hasOne(StudentGuardian::class); }
     public function medical(): HasOne { return $this->hasOne(StudentMedical::class); }
+    public function attendances(): HasMany { return $this->hasMany(Attendance::class); }
+    public function assignmentSubmissions(): HasMany { return $this->hasMany(AssignmentSubmission::class); }
+    public function feedbacks(): HasMany { return $this->hasMany(TeacherFeedback::class); }
 }

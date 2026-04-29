@@ -34,7 +34,7 @@
 </div>
 
 {{-- Stat Cards --}}
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;">
     @foreach([
         ['GPA',          $gpa,                           '📊', '#3b82f6', '#dbeafe'],
         ['Units Passed', $units,                         '📚', '#8b5cf6', '#f3e8ff'],
@@ -150,6 +150,84 @@
         @empty
         <p style="font-size:13px;color:#94a3b8;">No organizations joined.</p>
         @endforelse
+    </div>
+</div>
+
+{{-- My Schedule --}}
+@if($schedules->count())
+<div class="card" style="overflow:hidden;margin-bottom:20px;">
+    <div style="height:4px;background:linear-gradient(90deg,#8b5cf6,#a855f7);"></div>
+    <div style="padding:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;">📅 My Class Schedule</div>
+            <span style="padding:4px 12px;border-radius:99px;font-size:11px;font-weight:800;background:#f3e8ff;color:#7c3aed;">{{ $schedules->count() }} classes</span>
+        </div>
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th class="table-th" style="text-align:left;">Day</th>
+                        <th class="table-th" style="text-align:left;">Time</th>
+                        <th class="table-th" style="text-align:left;">Subject</th>
+                        <th class="table-th" style="text-align:left;">Room</th>
+                        <th class="table-th" style="text-align:left;">Section</th>
+                        <th class="table-th" style="text-align:left;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($schedules as $sched)
+                    @php $isToday = $sched->day === now()->format('l'); @endphp
+                    <tr style="{{ $isToday ? 'background:#fffbeb;' : '' }}">
+                        <td class="table-td" style="font-size:13px;font-weight:{{ $isToday ? '800' : '600' }};color:{{ $isToday ? '#f97316' : '#475569' }};">
+                            {{ $sched->day }}
+                            @if($isToday)<span style="display:inline-block;width:6px;height:6px;background:#f97316;border-radius:50%;margin-left:4px;vertical-align:middle;"></span>@endif
+                        </td>
+                        <td class="table-td" style="font-size:13px;font-weight:700;color:#0f172a;">{{ $sched->start_time }} – {{ $sched->end_time }}</td>
+                        <td class="table-td">
+                            <div style="font-size:13px;font-weight:800;color:#0f172a;">{{ $sched->subject_name }}</div>
+                            <div style="font-size:11px;color:#f97316;font-weight:700;">{{ $sched->subject_code }}</div>
+                        </td>
+                        <td class="table-td"><span style="background:#f1f5f9;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:700;color:#475569;">{{ $sched->room }}</span></td>
+                        <td class="table-td" style="font-size:13px;font-weight:600;color:#475569;">{{ $sched->section }}</td>
+                        <td class="table-td">
+                            <span class="badge {{ $sched->type === 'Laboratory' ? 'badge-purple' : 'badge-blue' }}">{{ $sched->type }}</span>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
+
+{{-- Reports Card --}}
+<div class="card" style="overflow:hidden;margin-bottom:20px;">
+    <div style="height:4px;background:linear-gradient(90deg,#f97316,#f59e0b);"></div>
+    <div style="padding:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;">📊 Academic Reports</div>
+            <a href="{{ route('reports.student') }}" style="font-size:12px;color:#f97316;font-weight:700;text-decoration:none;">View Full Reports →</a>
+        </div>
+
+        @if($academicRecords->count())
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;">
+            @foreach($academicRecords->take(4) as $ar)
+            <div style="padding:16px;background:#f8fafc;border-radius:14px;border-left:4px solid #3b82f6;">
+                <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:4px;">{{ $ar->academic_year }} · {{ $ar->semester }}</div>
+                <div style="font-size:28px;font-weight:900;color:#3b82f6;">{{ $ar->gpa }}</div>
+                <div style="font-size:11px;color:#64748b;margin-top:4px;">{{ $ar->units_passed }}/{{ $ar->units_enrolled }} units · {{ $ar->standing }}</div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <p style="font-size:13px;color:#94a3b8;margin-bottom:16px;">No academic records to generate reports from yet.</p>
+        @endif
+
+        <div style="display:flex;gap:10px;">
+            <a href="{{ route('reports.student') }}" class="btn btn-primary" style="font-size:13px;">📊 View Reports</a>
+            <a href="{{ route('reports.student.download') }}" class="btn" style="background:#eff6ff;color:#2563eb;font-size:13px;">📥 Download Report (CSV)</a>
+        </div>
     </div>
 </div>
 

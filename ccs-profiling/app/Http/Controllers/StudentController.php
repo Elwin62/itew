@@ -134,6 +134,43 @@ class StudentController extends Controller
         $student = Student::where('email', $user->email)
             ->with(['skills', 'achievements', 'organizations', 'violations', 'academicRecords.grades', 'internship', 'guardian', 'medical'])
             ->first();
-        return view('students.show', compact('student'));
+        return view('students.my-profile', compact('student'));
+    }
+
+    // Student self-edit form
+    public function editMyProfile()
+    {
+        $user    = auth()->user();
+        $student = Student::where('email', $user->email)->with('skills')->first();
+        if (!$student) return redirect()->route('student.my-profile')->with('error', 'No student record linked.');
+        return view('students.edit-profile', compact('student'));
+    }
+
+    // Student self-update
+    public function updateMyProfile(Request $request)
+    {
+        $user    = auth()->user();
+        $student = Student::where('email', $user->email)->first();
+        if (!$student) return redirect()->route('student.my-profile')->with('error', 'No student record linked.');
+
+        $validated = $request->validate([
+            'contact_number' => 'required|string|max:20',
+            'address'        => 'required|string|max:500',
+            'civil_status'   => 'nullable|string|max:30',
+        ]);
+
+        $student->update($validated);
+
+        // Update skills
+        if ($request->has('skills')) {
+            $student->skills()->delete();
+            foreach ($request->input('skills', []) as $skill) {
+                if (!empty($skill['name'])) {
+                    $student->skills()->create($skill);
+                }
+            }
+        }
+
+        return redirect()->route('student.my-profile')->with('success', 'Profile updated successfully!');
     }
 }

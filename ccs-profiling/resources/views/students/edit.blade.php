@@ -39,7 +39,7 @@
                 <div>
                     <label class="form-label">Academic Program *</label>
                     <select name="academic_program" class="form-input" required>
-                        @foreach(['BS Computer Science','BS Information Technology','BS Electrical Engineering','BS Mechanical Engineering','BS Civil Engineering','BS Accountancy','BS Nursing','BS Education'] as $prog)
+                        @foreach(['BS Information Technology','BS Computer Science','BS Information Systems'] as $prog)
                         <option value="{{ $prog }}" {{ old('academic_program', $student->academic_program) === $prog ? 'selected' : '' }}>{{ $prog }}</option>
                         @endforeach
                     </select>

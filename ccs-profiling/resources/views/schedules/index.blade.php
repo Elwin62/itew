@@ -3,42 +3,90 @@
 @section('page-title', 'Class Schedules')
 @section('page-subtitle', 'Weekly schedule grid for all classes')
 @section('content')
-<div class="card overflow-hidden">
-    <div class="p-6 border-b border-slate-100 dark:border-slate-800">
-        <h2 class="font-black text-slate-800 dark:text-slate-100">AY 2023-2024 · 1st Semester Schedule</h2>
+
+<div class="card" style="overflow:hidden;">
+    <div style="padding:20px 24px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-weight:800;font-size:16px;color:#0f172a;">📅 AY 2023-2024 · 1st Semester Schedule</div>
+        <span style="font-size:11px;font-weight:700;background:#f1f5f9;color:#64748b;padding:4px 12px;border-radius:99px;">{{ $schedules->count() }} classes</span>
     </div>
-    <div class="overflow-x-auto">
-        <table class="w-full text-left">
-            <thead class="bg-slate-50 dark:bg-slate-800/50">
+    <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;">
+            <thead>
                 <tr>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Subject</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Day</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Time</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Room</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Section</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Type</th>
-                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Faculty</th>
+                    <th class="table-th" style="text-align:left;">Subject</th>
+                    <th class="table-th" style="text-align:left;">Day</th>
+                    <th class="table-th" style="text-align:left;">Time</th>
+                    <th class="table-th" style="text-align:left;">Room</th>
+                    <th class="table-th" style="text-align:left;">Section</th>
+                    <th class="table-th" style="text-align:left;">Type</th>
+                    <th class="table-th" style="text-align:left;">Faculty ID</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-50 dark:divide-slate-800/50">
+            <tbody>
                 @forelse($schedules as $sched)
-                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                    <td class="px-6 py-4">
-                        <p class="font-bold text-slate-800 dark:text-slate-200 text-sm">{{ $sched->subject_name }}</p>
-                        <p class="text-xs text-orange-500 font-bold">{{ $sched->subject_code }}</p>
+                @php $isToday = $sched->day === now()->format('l'); @endphp
+                <tr style="{{ $isToday ? 'background:#fffbeb;' : '' }}">
+                    <td class="table-td">
+                        <div style="font-size:13px;font-weight:800;color:#0f172a;">{{ $sched->subject_name }}</div>
+                        <div style="font-size:11px;color:#f97316;font-weight:700;">{{ $sched->subject_code }}</div>
                     </td>
-                    <td class="px-6 py-4"><span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ $sched->day }}</span></td>
-                    <td class="px-6 py-4"><span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ $sched->start_time }} – {{ $sched->end_time }}</span></td>
-                    <td class="px-6 py-4"><span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-1 rounded-lg text-xs font-bold">{{ $sched->room }}</span></td>
-                    <td class="px-6 py-4"><span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ $sched->section }}</span></td>
-                    <td class="px-6 py-4"><span class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase {{ $sched->type === 'Laboratory' ? 'bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400' : 'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400' }}">{{ $sched->type }}</span></td>
-                    <td class="px-6 py-4"><span class="text-sm text-slate-500 dark:text-slate-400">{{ $sched->faculty_id }}</span></td>
+                    <td class="table-td">
+                        <span style="font-size:13px;font-weight:{{ $isToday ? '800' : '600' }};color:{{ $isToday ? '#f97316' : '#475569' }};">
+                            {{ $sched->day }}
+                            @if($isToday)<span style="display:inline-block;width:6px;height:6px;background:#f97316;border-radius:50%;margin-left:4px;vertical-align:middle;"></span>@endif
+                        </span>
+                    </td>
+                    <td class="table-td" style="font-size:13px;font-weight:700;color:#0f172a;">{{ $sched->start_time }} – {{ $sched->end_time }}</td>
+                    <td class="table-td">
+                        <span style="background:#f1f5f9;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:700;color:#475569;">{{ $sched->room }}</span>
+                    </td>
+                    <td class="table-td" style="font-size:13px;font-weight:700;color:#475569;">{{ $sched->section }}</td>
+                    <td class="table-td">
+                        <span class="badge {{ $sched->type === 'Laboratory' ? 'badge-purple' : 'badge-blue' }}">{{ $sched->type }}</span>
+                    </td>
+                    <td class="table-td" style="font-size:12px;color:#64748b;">{{ $sched->faculty_id }}</td>
                 </tr>
                 @empty
-                <tr><td colspan="7" class="px-6 py-16 text-center"><div class="text-4xl mb-3">📅</div><p class="font-bold text-slate-500">No schedules found</p></td></tr>
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            <div style="font-size:48px;margin-bottom:12px;">📅</div>
+                            <div style="font-weight:700;font-size:16px;color:#475569;">No schedules found</div>
+                        </div>
+                    </td>
+                </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
+
+{{-- Weekly View --}}
+@if($schedules->count())
+<div class="card" style="padding:24px;margin-top:24px;">
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px;">📋 Weekly Overview</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+        @foreach($days as $day)
+        @php $dayClasses = $schedules->where('day', $day)->sortBy('start_time'); @endphp
+        <div style="display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:start;padding:8px 0;{{ $day === now()->format('l') ? 'background:#fffbeb;border-radius:12px;padding:12px 16px;' : '' }}">
+            <div style="font-size:13px;font-weight:800;color:{{ $day === now()->format('l') ? '#f97316' : '#94a3b8' }};">
+                {{ $day }}
+                @if($day === now()->format('l'))<span style="display:inline-block;width:6px;height:6px;background:#f97316;border-radius:50%;margin-left:4px;vertical-align:middle;"></span>@endif
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                @forelse($dayClasses as $c)
+                <div style="padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;background:{{ $day===now()->format('l')?'#fff7ed':'#f8fafc' }};color:{{ $day===now()->format('l')?'#c2410c':'#475569' }};border:1px solid {{ $day===now()->format('l')?'#fed7aa':'#f1f5f9' }};">
+                    <div style="font-weight:800;">{{ $c->subject_code }} · {{ $c->section }}</div>
+                    <div style="font-size:11px;color:#94a3b8;margin-top:2px;">{{ $c->start_time }}–{{ $c->end_time }} · {{ $c->room }}</div>
+                </div>
+                @empty
+                <span style="font-size:12px;color:#cbd5e1;padding:8px 0;">No classes</span>
+                @endforelse
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+@endif
+
 @endsection

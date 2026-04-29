@@ -6,7 +6,7 @@
 @section('content')
 
 {{-- Stats Grid --}}
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px;">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:28px;">
 @php
 $statCards = [
   ['Total Students','🎓',number_format($stats['total_students']),'#3b82f6','#dbeafe','#1d4ed8'],
@@ -43,7 +43,7 @@ $statCards = [
     </div>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
 
     {{-- Program Distribution --}}
     <div class="card" style="padding:24px;">
@@ -53,14 +53,69 @@ $statCards = [
             @php $pct = $stats['total_students'] > 0 ? round(($prog->count/$stats['total_students'])*100) : 0; @endphp
             <div>
                 <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#475569;margin-bottom:5px;">
-                    <span>{{ Str::after($prog->academic_program,'BS ') }}</span>
-                    <span style="color:#f97316;">{{ $prog->count }}</span>
+                    <span>{{ $prog->academic_program }}</span>
+                    <span style="color:#f97316;">{{ $prog->count }} ({{ $pct }}%)</span>
                 </div>
                 <div class="progress-bar"><div class="progress-fill" style="width:{{$pct}}%;"></div></div>
             </div>
             @endforeach
         </div>
     </div>
+
+    {{-- Reports Summary Card --}}
+    <div class="card" style="overflow:hidden;">
+        <div style="height:4px;background:linear-gradient(90deg,#f97316,#f59e0b);"></div>
+        <div style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;">📊 Reports Summary</div>
+                <a href="{{ route('reports.admin') }}" style="font-size:12px;color:#f97316;font-weight:700;text-decoration:none;">View Full Reports →</a>
+            </div>
+
+            {{-- Gender Distribution --}}
+            <div style="margin-bottom:16px;">
+                <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px;">Gender Distribution</div>
+                @foreach($reportData['genderDist'] as $g)
+                @php $gpct = $stats['total_students'] > 0 ? round(($g->count/$stats['total_students'])*100) : 0; @endphp
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                    <span style="font-size:11px;font-weight:700;color:#475569;width:55px;">{{ $g->gender }}</span>
+                    <div style="flex:1;height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:{{ $gpct }}%;background:{{ $g->gender==='Male'?'#3b82f6':'#ec4899' }};border-radius:99px;"></div>
+                    </div>
+                    <span style="font-size:11px;font-weight:800;color:#0f172a;width:32px;text-align:right;">{{ $gpct }}%</span>
+                </div>
+                @endforeach
+            </div>
+
+            {{-- Year Level --}}
+            <div style="margin-bottom:16px;">
+                <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px;">Year Level Breakdown</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+                    @foreach($reportData['yearLevelDist'] as $yl)
+                    <div style="text-align:center;padding:10px;background:#f8fafc;border-radius:12px;">
+                        <div style="font-size:20px;font-weight:900;color:#3b82f6;">{{ $yl->count }}</div>
+                        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Year {{ $yl->year_level }}</div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Download buttons --}}
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <a href="{{ route('reports.admin.download', ['type'=>'students']) }}" class="btn" style="background:#eff6ff;color:#2563eb;font-size:12px;padding:8px 14px;">
+                    📥 Students CSV
+                </a>
+                <a href="{{ route('reports.admin.download', ['type'=>'faculty']) }}" class="btn" style="background:#f5f3ff;color:#7c3aed;font-size:12px;padding:8px 14px;">
+                    📥 Faculty CSV
+                </a>
+                <a href="{{ route('reports.admin.download', ['type'=>'enrollment']) }}" class="btn" style="background:#f0fdf4;color:#16a34a;font-size:12px;padding:8px 14px;">
+                    📥 Enrollment CSV
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
 
     {{-- Recent Activity --}}
     <div class="card" style="padding:24px;">
