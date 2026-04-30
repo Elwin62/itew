@@ -68,14 +68,19 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        $this->call([
-            UserSeeder::class,
-            StudentSeeder::class,
-            FacultySeeder::class,
-            EventSeeder::class,
-            ScheduleSeeder::class,
-            ReportDataSeeder::class,
-        ]);
+        if (User::count() === 0) {
+            $this->call([
+                UserSeeder::class,
+                StudentSeeder::class,
+                FacultySeeder::class,
+                EventSeeder::class,
+                ScheduleSeeder::class,
+                ReportDataSeeder::class,
+            ]);
+            $this->command->info('Database seeded successfully.');
+        } else {
+            $this->command->info('Users table is not empty. Skipping database seeding.');
+        }
     }
 }
 
